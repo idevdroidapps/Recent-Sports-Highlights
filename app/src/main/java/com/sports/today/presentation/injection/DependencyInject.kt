@@ -8,7 +8,7 @@ import com.sports.today.domain.interfaces.SportRepository
 import com.sports.today.domain.usecases.SportUseCases
 import com.sports.today.presentation.factories.SharedViewModelFactory
 
-class DependencyInject {
+object DependencyInject {
 
     /**
      * Provides Retrofit Service
