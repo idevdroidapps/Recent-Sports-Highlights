@@ -1,0 +1,2 @@
+rootProject.name = "Sports Today"
+include ':app'
