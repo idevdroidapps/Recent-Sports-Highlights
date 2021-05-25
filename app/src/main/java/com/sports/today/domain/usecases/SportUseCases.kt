@@ -5,7 +5,7 @@ import com.sports.today.domain.interfaces.SportRepository
 
 class SportUseCases(private val sportRepository: SportRepository) {
 
-    suspend fun getHighlights(): SportResponse {
-        return sportRepository.getHighlights()
+    suspend fun getSports(): SportResponse {
+        return sportRepository.getSports()
     }
 }

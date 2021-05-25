@@ -9,7 +9,7 @@
 
     <data>
         <variable
-            name="highlight"
-            type="com.sports.today.domain.entities.Highlight" />
+            name="sport"
+            type="com.sports.today.domain.entities.Sport" />
     </data>
 </layout>

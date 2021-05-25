@@ -6,8 +6,8 @@ import com.sports.today.domain.interfaces.SportRepository
 
 class SportRepositoryImpl(private val sportService: SportService) : SportRepository {
 
-    override suspend fun getHighlights(): SportResponse {
-        return sportService.getHighlights()
+    override suspend fun getSports(): SportResponse {
+        return sportService.getSports()
     }
 
     companion object {

@@ -1,33 +1,55 @@
 package com.sports.today.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sports.today.domain.entities.Highlight
+import com.sports.today.domain.entities.Basketball
+import com.sports.today.domain.entities.Formula1
+import com.sports.today.domain.entities.Sport
+import com.sports.today.domain.entities.Tennis
 import com.sports.today.domain.usecases.SportUseCases
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okio.IOException
+import retrofit2.HttpException
 
 class SharedViewModel(private val sportUseCases: SportUseCases) : ViewModel() {
 
-    val highlights: LiveData<List<Highlight>> get() = _highlights
-    private var _highlights = MutableLiveData<List<Highlight>>()
+    val f1Results: LiveData<List<Formula1>> get() = _f1Results
+    private var _f1Results = MutableLiveData<List<Formula1>>()
 
-    var selectedHighlight: Highlight? = null
+    val basketballResults: LiveData<List<Basketball>> get() = _basketballResults
+    private var _basketballResults = MutableLiveData<List<Basketball>>()
 
-    val shouldShowDetails: LiveData<Boolean> get() = _shouldShowDetails
-    private var _shouldShowDetails = MutableLiveData<Boolean>()
+    val tennisResults: LiveData<List<Tennis>> get() = _tennisResults
+    private var _tennisResults = MutableLiveData<List<Tennis>>()
+
+    val shouldNavToDetails: LiveData<Boolean> get() = _shouldNavToDetails
+    private var _shouldNavToDetails = MutableLiveData<Boolean>()
+
+    var selectedSportItem: Sport? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO){
-            val response = sportUseCases.getHighlights()
-            _highlights.value = response.highlights
+            try {
+                val response = sportUseCases.getSports()
+
+                _f1Results.postValue(response.f1Results)
+                _basketballResults.postValue(response.nbaResults)
+                _tennisResults.postValue(response.tennisResults)
+
+            } catch (e: IOException) {
+                Log.e("OkHttp", e.toString())
+            } catch (e: HttpException){
+                Log.e("OkHttp", e.toString())
+            }
         }
     }
 
-    fun showDetails(show: Boolean) {
-        _shouldShowDetails.value = show
+    fun navToDetails(nav: Boolean) {
+        _shouldNavToDetails.value = nav
     }
 
 }

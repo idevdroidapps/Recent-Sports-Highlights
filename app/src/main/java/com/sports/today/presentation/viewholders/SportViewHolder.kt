@@ -4,24 +4,24 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sports.today.databinding.ListItemBinding
-import com.sports.today.domain.entities.Highlight
+import com.sports.today.domain.entities.Sport
 
-class HighlightViewHolder(private val binding: ListItemBinding) :
+class SportViewHolder(private val binding: ListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Highlight, clickListener: (Highlight) -> Unit) {
-        binding.highlight = item
+    fun bind(item: Sport, clickListener: (Sport) -> Unit) {
+        binding.sport = item
         binding.root.setOnClickListener {
-            binding.highlight?.apply { clickListener(this) }
+            binding.sport?.apply { clickListener(this) }
         }
         binding.executePendingBindings()
     }
 
     companion object {
-        fun from(parent: ViewGroup): HighlightViewHolder {
+        fun from(parent: ViewGroup): SportViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ListItemBinding.inflate(layoutInflater, parent, false)
-            return HighlightViewHolder(binding)
+            return SportViewHolder(binding)
         }
     }
 }
