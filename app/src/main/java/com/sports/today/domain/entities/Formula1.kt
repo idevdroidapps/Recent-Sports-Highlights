@@ -7,4 +7,4 @@ data class Formula1(
     @field:SerializedName("seconds") val seconds: Double,
     @field:SerializedName("tournament") val tournament: String,
     @field:SerializedName("winner") val winner: String
-) : Sport(publicationDate)
+)

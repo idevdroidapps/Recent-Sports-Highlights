@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sports.today.domain.entities.Basketball
 import com.sports.today.domain.entities.Formula1
-import com.sports.today.domain.entities.Sport
 import com.sports.today.domain.entities.Tennis
 import com.sports.today.domain.usecases.SportUseCases
 import kotlinx.coroutines.Dispatchers
@@ -29,11 +28,13 @@ class SharedViewModel(private val sportUseCases: SportUseCases) : ViewModel() {
     val shouldNavToDetails: LiveData<Boolean> get() = _shouldNavToDetails
     private var _shouldNavToDetails = MutableLiveData<Boolean>()
 
-    var selectedSportItem: Sport? = null
+    var selectedDrawableId: Int? = null
+    var selectedText: String? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO){
             try {
+
                 val response = sportUseCases.getSports()
 
                 _f1Results.postValue(response.f1Results)

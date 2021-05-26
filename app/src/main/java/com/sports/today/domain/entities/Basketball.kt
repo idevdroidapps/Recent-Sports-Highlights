@@ -9,4 +9,4 @@ data class Basketball(
     @field:SerializedName("publicationDate") val publicationDate: String,
     @field:SerializedName("tournament") val tournament: String,
     @field:SerializedName("winner") val winner: String
-) : Sport(publicationDate)
+)

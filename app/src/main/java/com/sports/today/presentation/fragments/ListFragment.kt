@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,8 +15,9 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.sports.today.NavGraphDirections
 import com.sports.today.R
 import com.sports.today.databinding.FragmentListBinding
-import com.sports.today.domain.entities.Sport
-import com.sports.today.presentation.adapters.SportsListAdapter
+import com.sports.today.presentation.adapters.BasketballAdapter
+import com.sports.today.presentation.adapters.Formula1Adapter
+import com.sports.today.presentation.adapters.TennisAdapter
 import com.sports.today.presentation.injection.DependencyInject
 import com.sports.today.presentation.viewmodels.SharedViewModel
 
@@ -22,29 +26,26 @@ class ListFragment : Fragment() {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var _binding: FragmentListBinding
 
-    private val f1Adapter: SportsListAdapter by lazy {
-        SportsListAdapter(object : (Sport) -> Unit {
-            override fun invoke(sport: Sport) {
-                sharedViewModel.selectedSportItem = sport
-                sharedViewModel.navToDetails(true)
+    private val f1Adapter: Formula1Adapter by lazy {
+        Formula1Adapter(object : (View) -> Unit {
+            override fun invoke(view: View) {
+                navToDetails(view)
             }
         })
     }
 
-    private val basketballAdapter: SportsListAdapter by lazy {
-        SportsListAdapter(object : (Sport) -> Unit {
-            override fun invoke(sport: Sport) {
-                sharedViewModel.selectedSportItem = sport
-                sharedViewModel.navToDetails(true)
+    private val basketballAdapter: BasketballAdapter by lazy {
+        BasketballAdapter(object : (View) -> Unit {
+            override fun invoke(view: View) {
+                navToDetails(view)
             }
         })
     }
 
-    private val tennisAdapter: SportsListAdapter by lazy {
-        SportsListAdapter(object : (Sport) -> Unit {
-            override fun invoke(sport: Sport) {
-                sharedViewModel.selectedSportItem = sport
-                sharedViewModel.navToDetails(true)
+    private val tennisAdapter: TennisAdapter by lazy {
+        TennisAdapter(object : (View) -> Unit {
+            override fun invoke(view: View) {
+                navToDetails(view)
             }
         })
     }
@@ -78,6 +79,11 @@ class ListFragment : Fragment() {
         _binding.recyclerViewMain.apply {
             adapter = concatAdapter
         }
+    }
+
+    private fun navToDetails(view: View) {
+        sharedViewModel.selectedText = ((view as ConstraintLayout)[1] as TextView).text.toString()
+        sharedViewModel.navToDetails(true)
     }
 
     private fun subscribeUI() {
