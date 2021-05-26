@@ -7,7 +7,7 @@ Sports Highlights - API Demo
 ## Built With
 * [Kotlin](https://kotlinlang.org/)
 * [Android Architecture Components](https://developer.android.com/topic/libraries/architecture)
-* [Sports Dev API](https://ancient-wood-1161.getsandbox.com:443/results)
+* Sports Dev API https://ancient-wood-1161.getsandbox.com:443/results
 * [Retrofit](https://square.github.io/retrofit/)
 
 ## Instructions

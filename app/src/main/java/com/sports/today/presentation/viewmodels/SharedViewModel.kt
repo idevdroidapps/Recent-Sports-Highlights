@@ -10,6 +10,7 @@ import com.sports.today.domain.entities.Formula1
 import com.sports.today.domain.entities.Tennis
 import com.sports.today.domain.usecases.SportUseCases
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
@@ -28,13 +29,14 @@ class SharedViewModel(private val sportUseCases: SportUseCases) : ViewModel() {
     val shouldNavToDetails: LiveData<Boolean> get() = _shouldNavToDetails
     private var _shouldNavToDetails = MutableLiveData<Boolean>()
 
-    var selectedDrawableId: Int? = null
+    val retrievalError: LiveData<Boolean> get() = _retrievalError
+    private var _retrievalError = MutableLiveData<Boolean>()
+
     var selectedText: String? = null
 
-    init {
-        viewModelScope.launch(Dispatchers.IO){
+    fun fetchSports() {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-
                 val response = sportUseCases.getSports()
 
                 _f1Results.postValue(response.f1Results)
@@ -43,14 +45,20 @@ class SharedViewModel(private val sportUseCases: SportUseCases) : ViewModel() {
 
             } catch (e: IOException) {
                 Log.e("OkHttp", e.toString())
-            } catch (e: HttpException){
+                _retrievalError.value = true
+            } catch (e: HttpException) {
                 Log.e("OkHttp", e.toString())
+                _retrievalError.value = true
             }
         }
     }
 
     fun navToDetails(nav: Boolean) {
         _shouldNavToDetails.value = nav
+    }
+
+    fun resetOnError(hide: Boolean){
+        _retrievalError.value = hide
     }
 
 }

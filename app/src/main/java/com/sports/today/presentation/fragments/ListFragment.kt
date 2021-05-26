@@ -69,13 +69,21 @@ class ListFragment : Fragment() {
         _binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
 
-        initRecyclerView()
+        initViews()
         subscribeUI()
 
         return _binding.root
     }
 
-    private fun initRecyclerView() {
+    private fun initViews() {
+        // ProgressBar
+        _binding.shouldShowList = false
+        // Button
+        _binding.button.setOnClickListener {
+            _binding.progressBar.visibility = View.VISIBLE
+            sharedViewModel.fetchSports()
+        }
+        // RecyclerView
         _binding.recyclerViewMain.apply {
             adapter = concatAdapter
         }
@@ -90,14 +98,20 @@ class ListFragment : Fragment() {
 
         sharedViewModel.f1Results.observe(viewLifecycleOwner, {
             f1Adapter.submitList(it)
+            _binding.shouldShowList = true
+            _binding.progressBar.visibility = View.GONE
         })
 
         sharedViewModel.basketballResults.observe(viewLifecycleOwner, {
             basketballAdapter.submitList(it)
+            _binding.shouldShowList = true
+            _binding.progressBar.visibility = View.GONE
         })
 
         sharedViewModel.tennisResults.observe(viewLifecycleOwner, {
             tennisAdapter.submitList(it)
+            _binding.shouldShowList = true
+            _binding.progressBar.visibility = View.GONE
         })
 
         sharedViewModel.shouldNavToDetails.observe(viewLifecycleOwner, { show ->
@@ -106,6 +120,15 @@ class ListFragment : Fragment() {
                 this@ListFragment.findNavController()
                     .navigate(NavGraphDirections.actionGlobalDetailsFragment())
             }
+        })
+
+        sharedViewModel.retrievalError.observe(viewLifecycleOwner, {
+            if(it){
+                sharedViewModel.resetOnError(false)
+                _binding.shouldShowList = false
+                _binding.progressBar.visibility = View.GONE
+            }
+
         })
     }
 }
