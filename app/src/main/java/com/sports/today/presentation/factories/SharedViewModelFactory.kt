@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.sports.today.domain.usecases.SportUseCases
 import com.sports.today.presentation.viewmodels.SharedViewModel
 
-class SharedViewModelFactory(private val sportUseCases: SportUseCases): ViewModelProvider.Factory {
+class SharedViewModelFactory(private val sportUseCases: SportUseCases) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SharedViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

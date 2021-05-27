@@ -16,6 +16,7 @@ class TennisViewHolder(private val binding: ListItemBinding) :
             "${item.tournament}: ${item.winner} wins against ${item.looser} in ${item.numberOfSets} sets"
         binding.textViewMessage.text = message
         binding.imageViewIcon.setImageResource(R.drawable.ic_tennis)
+        binding.textViewDate.text = item.publicationDate
         binding.root.setOnClickListener {
             it.apply { clickListener(this) }
         }

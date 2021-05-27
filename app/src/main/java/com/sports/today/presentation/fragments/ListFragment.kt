@@ -12,11 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.sports.today.NavGraphDirections
 import com.sports.today.R
 import com.sports.today.databinding.FragmentListBinding
 import com.sports.today.presentation.adapters.BasketballAdapter
 import com.sports.today.presentation.adapters.Formula1Adapter
+import com.sports.today.presentation.adapters.HeaderAdapter
 import com.sports.today.presentation.adapters.TennisAdapter
 import com.sports.today.presentation.injection.DependencyInject
 import com.sports.today.presentation.viewmodels.SharedViewModel
@@ -26,6 +28,18 @@ class ListFragment : Fragment() {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var _binding: FragmentListBinding
 
+    private val basketballAdapter: BasketballAdapter by lazy {
+        BasketballAdapter(object : (View) -> Unit {
+            override fun invoke(view: View) {
+                navToDetails(view)
+            }
+        })
+    }
+
+    private val basketballHeaderAdapter: HeaderAdapter by lazy {
+        HeaderAdapter()
+    }
+
     private val f1Adapter: Formula1Adapter by lazy {
         Formula1Adapter(object : (View) -> Unit {
             override fun invoke(view: View) {
@@ -34,12 +48,8 @@ class ListFragment : Fragment() {
         })
     }
 
-    private val basketballAdapter: BasketballAdapter by lazy {
-        BasketballAdapter(object : (View) -> Unit {
-            override fun invoke(view: View) {
-                navToDetails(view)
-            }
-        })
+    private val f1HeaderAdapter: HeaderAdapter by lazy {
+        HeaderAdapter()
     }
 
     private val tennisAdapter: TennisAdapter by lazy {
@@ -50,8 +60,19 @@ class ListFragment : Fragment() {
         })
     }
 
+    private val tennisHeaderAdapter: HeaderAdapter by lazy {
+        HeaderAdapter()
+    }
+
     private val concatAdapter: ConcatAdapter by lazy {
-        ConcatAdapter(f1Adapter, basketballAdapter, tennisAdapter)
+        ConcatAdapter(
+            tennisHeaderAdapter,
+            tennisAdapter,
+            f1HeaderAdapter,
+            f1Adapter,
+            basketballHeaderAdapter,
+            basketballAdapter
+        )
     }
 
     override fun onCreateView(
@@ -84,13 +105,15 @@ class ListFragment : Fragment() {
             sharedViewModel.fetchSports()
         }
         // RecyclerView
+        val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        _binding.recyclerViewMain.addItemDecoration(decoration)
         _binding.recyclerViewMain.apply {
             adapter = concatAdapter
         }
     }
 
     private fun navToDetails(view: View) {
-        sharedViewModel.selectedText = ((view as ConstraintLayout)[1] as TextView).text.toString()
+        sharedViewModel.selectedText = ((view as ConstraintLayout)[2] as TextView).text.toString()
         sharedViewModel.navToDetails(true)
     }
 
@@ -98,18 +121,24 @@ class ListFragment : Fragment() {
 
         sharedViewModel.f1Results.observe(viewLifecycleOwner, {
             f1Adapter.submitList(it)
+            f1HeaderAdapter.headerText = getString(R.string.formula1) + "(${it.size})"
+            f1HeaderAdapter.notifyDataSetChanged()
             _binding.shouldShowList = true
             _binding.progressBar.visibility = View.GONE
         })
 
         sharedViewModel.basketballResults.observe(viewLifecycleOwner, {
             basketballAdapter.submitList(it)
+            basketballHeaderAdapter.headerText = getString(R.string.basketball) + "(${it.size})"
+            basketballHeaderAdapter.notifyDataSetChanged()
             _binding.shouldShowList = true
             _binding.progressBar.visibility = View.GONE
         })
 
         sharedViewModel.tennisResults.observe(viewLifecycleOwner, {
             tennisAdapter.submitList(it)
+            tennisHeaderAdapter.headerText = getString(R.string.tennis) + "(${it.size})"
+            tennisHeaderAdapter.notifyDataSetChanged()
             _binding.shouldShowList = true
             _binding.progressBar.visibility = View.GONE
         })
@@ -123,7 +152,7 @@ class ListFragment : Fragment() {
         })
 
         sharedViewModel.retrievalError.observe(viewLifecycleOwner, {
-            if(it){
+            if (it) {
                 sharedViewModel.resetOnError(false)
                 _binding.shouldShowList = false
                 _binding.progressBar.visibility = View.GONE

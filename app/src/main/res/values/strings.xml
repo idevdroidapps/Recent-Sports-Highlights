@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Sports Today</string>
     <string name="button_main">Get Sports Updates</string>
+    <string name="formula1">Formula One</string>
+    <string name="basketball">Basketball</string>
+    <string name="tennis">Tennis</string>
 </resources>

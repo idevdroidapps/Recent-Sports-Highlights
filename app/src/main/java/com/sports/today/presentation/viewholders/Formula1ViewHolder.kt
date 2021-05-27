@@ -16,6 +16,7 @@ class Formula1ViewHolder(private val binding: ListItemBinding) :
             "${item.winner} wins ${item.tournament} by ${item.seconds}"
         binding.textViewMessage.text = message
         binding.imageViewIcon.setImageResource(R.drawable.ic_formula1)
+        binding.textViewDate.text = item.publicationDate
         binding.root.setOnClickListener {
             it.apply { clickListener(this) }
         }

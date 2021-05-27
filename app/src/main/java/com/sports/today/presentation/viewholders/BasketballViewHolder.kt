@@ -16,6 +16,7 @@ class BasketballViewHolder(private val binding: ListItemBinding) :
             "${item.mvp} leads ${item.winner} to a Game ${item.gameNumber} win in the ${item.tournament} "
         binding.textViewMessage.text = message
         binding.imageViewIcon.setImageResource(R.drawable.ic_basketball)
+        binding.textViewDate.text = item.publicationDate
         binding.root.setOnClickListener {
             it.apply { clickListener(this) }
         }

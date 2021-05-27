@@ -1,7 +1,7 @@
 package com.sports.today.presentation.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.sports.today.R
 import com.sports.today.databinding.ActivityMainBinding
