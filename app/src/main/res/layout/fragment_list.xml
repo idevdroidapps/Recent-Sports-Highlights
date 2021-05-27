@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="?attr/colorSecondary"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,8 +13,11 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:gravity="center"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="20sp"
+            android:textSize="22sp"
+            android:textStyle="bold"
             android:visibility="@{shouldShowList ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
