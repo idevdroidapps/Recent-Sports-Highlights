@@ -22,6 +22,8 @@ import com.sports.today.presentation.adapters.HeaderAdapter
 import com.sports.today.presentation.adapters.TennisAdapter
 import com.sports.today.presentation.injection.DependencyInject
 import com.sports.today.presentation.viewmodels.SharedViewModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class ListFragment : Fragment() {
 
@@ -96,6 +98,19 @@ class ListFragment : Fragment() {
         return _binding.root
     }
 
+    private fun extractHeaderDate(dateString: String): String{
+        val ldt = LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern(SharedViewModel.DATE_PATTERN))
+        return "${ldt.month} ${ldt.dayOfMonth}, ${ldt.year}"
+    }
+
+    private fun handleUpdates(headerAdapter: HeaderAdapter, headerText: String, pubDate: String) {
+        headerAdapter.headerText = headerText
+        headerAdapter.notifyDataSetChanged()
+        _binding.textViewMainHeader.text = pubDate
+        _binding.shouldShowList = true
+        _binding.progressBar.visibility = View.GONE
+    }
+
     private fun initViews() {
         // ProgressBar
         _binding.shouldShowList = false
@@ -121,26 +136,29 @@ class ListFragment : Fragment() {
 
         sharedViewModel.f1Results.observe(viewLifecycleOwner, {
             f1Adapter.submitList(it)
-            f1HeaderAdapter.headerText = getString(R.string.formula1) + "(${it.size})"
-            f1HeaderAdapter.notifyDataSetChanged()
-            _binding.shouldShowList = true
-            _binding.progressBar.visibility = View.GONE
+            handleUpdates(
+                f1HeaderAdapter,
+                getString(R.string.formula1) + "(${it.size})",
+                extractHeaderDate(it.first().publicationDate)
+            )
         })
 
         sharedViewModel.basketballResults.observe(viewLifecycleOwner, {
             basketballAdapter.submitList(it)
-            basketballHeaderAdapter.headerText = getString(R.string.basketball) + "(${it.size})"
-            basketballHeaderAdapter.notifyDataSetChanged()
-            _binding.shouldShowList = true
-            _binding.progressBar.visibility = View.GONE
+            handleUpdates(
+                basketballHeaderAdapter,
+                getString(R.string.basketball) + "(${it.size})",
+                extractHeaderDate(it.first().publicationDate)
+            )
         })
 
         sharedViewModel.tennisResults.observe(viewLifecycleOwner, {
             tennisAdapter.submitList(it)
-            tennisHeaderAdapter.headerText = getString(R.string.tennis) + "(${it.size})"
-            tennisHeaderAdapter.notifyDataSetChanged()
-            _binding.shouldShowList = true
-            _binding.progressBar.visibility = View.GONE
+            handleUpdates(
+                tennisHeaderAdapter,
+                getString(R.string.tennis) + "(${it.size})",
+                extractHeaderDate(it.first().publicationDate)
+            )
         })
 
         sharedViewModel.shouldNavToDetails.observe(viewLifecycleOwner, { show ->

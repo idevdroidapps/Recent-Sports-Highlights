@@ -102,7 +102,7 @@ class SharedViewModel(private val sportUseCases: SportUseCases) : ViewModel() {
     }
 
     companion object {
-        private const val DATE_PATTERN = "MMM d, yyyy h:mm:ss a"
+        const val DATE_PATTERN = "MMM d, yyyy h:mm:ss a"
     }
 
 }
